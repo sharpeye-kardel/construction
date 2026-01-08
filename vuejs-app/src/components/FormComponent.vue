@@ -1,3 +1,12 @@
+/**
+ * @file FormComponent.vue
+ * @description A reusable form component for creating and editing construction projects.
+ * Provides input fields for project name, location, category, start date, stage, and details
+ * with validation rules and error handling.
+ *
+ * @example
+ * <FormComponent :formData="projectData" :onSubmit="handleSubmit" />
+ */
 <template>
   <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
     <v-text-field 
@@ -67,6 +76,14 @@
 
 <script>
 export default {
+  /**
+   * @property {Object} formData - The form data object containing project fields (name, location, category, startDate, stage, details)
+   * @required
+   * @default {}
+   *
+   * @property {Function} onSubmit - Callback function invoked when the form is successfully submitted with validated data
+   * @required
+   */
   props: {
     formData: {
       type: Object,
@@ -78,6 +95,16 @@ export default {
       required: true
     }
   },
+  /**
+   * @data
+   * @property {boolean} valid - Tracks whether the form passes all validation rules
+   * @property {Object} form - Local copy of form field values for name, startDate, and stage
+   * @property {Array} stageOptions - Available construction stage options with value/title pairs (Concept, Design & Documentation, Pre-Construction, Construction)
+   * @property {Array} categoryOptions - Available project category options (Education, Health, Office, Other)
+   * @property {string} dateFormat - Expected date format pattern for date inputs
+   * @property {Object} rules - Validation rule functions including required field validation
+   * @property {Object} snackbar - Snackbar notification state with show, message, and timeout properties
+   */
   data() {
     return {
       valid: false,
@@ -105,14 +132,29 @@ export default {
     };
   },
   methods: {
+    /**
+     * Handles stage selection changes by clearing the otherStage field when a non-Other option is selected.
+     * @param {string|number} value - The selected stage value
+     * @returns {void}
+     */
     handleStageChange(value) {
       if (value !== 'Other') {
         this.formData.otherStage = ''; // Clear 'Other' field if not 'Other'
       }
     },
+    /**
+     * Navigates back to the previous page in the browser history.
+     * @returns {void}
+     */
     goBack() {
       this.$router.back(); // Navigate back to the previous page
     },
+    /**
+     * Validates and submits the form data.
+     * Transforms the form data by converting startDate to ISO format and resolving the category value.
+     * Displays error messages in a snackbar if submission fails.
+     * @returns {Promise<void>}
+     */
     async submitForm() {
       if (this.$refs.form.validate()) {
         try {

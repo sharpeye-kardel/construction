@@ -17,6 +17,7 @@ export const deleteApiData = (id) => {
 };
 
 export const loginApiData = (data) => {
+  console.log("base url is ", import.meta.env.VITE_APP_BASE_URL_DOTNET);
   return dotnetApi.post(`/users/login`, data);
 };
 
