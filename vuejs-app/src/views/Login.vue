@@ -18,6 +18,7 @@
                             <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
                             <v-btn type="submit" color="primary">Login</v-btn>
                         </v-form>
+                        <v-btn @click="logout" color="error" class="mt-3">Logout</v-btn>
                     </v-card-text>
                 </v-card>
                 <v-snackbar v-model="snackbar" :color="errorColor" top multi-line>
@@ -60,7 +61,16 @@ export default {
         };
     },
     methods: {
-        ...mapActions({ loginAction: 'loginTo' }),
+        ...mapActions({ loginAction: 'loginTo', logoutAction: 'logoutTo' }),
+        /**
+         * Handles user logout by dispatching the logout action to the Vuex store
+         * and redirecting to the login page.
+         * @returns {void}
+         */
+        logout() {
+            this.logoutAction();
+            this.$router.push('/login');
+        },
         /**
          * Handles user login by dispatching the login action to the Vuex store.
          * On successful authentication, navigates the user to the home page.
